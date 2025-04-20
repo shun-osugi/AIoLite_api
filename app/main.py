@@ -1,10 +1,16 @@
 import uuid
-from fastapi import FastAPI
+from fastapi import FastAPI, Header, HTTPException
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
+from dotenv import load_dotenv
+import os
 from pinecone_db import store_text, search_similar, assign_labels_to_text
 from fastapi.middleware.cors import CORSMiddleware
 
+
+load_dotenv()
+# 環境変数からAPIキーを取得
+API_KEY = os.getenv("API_KEY")
 
 app = FastAPI()
 
@@ -31,7 +37,10 @@ def read_root():
 
 
 @app.post("/classify")
-async def classify_text(request: TextRequest):
+async def classify_text(request: TextRequest):#,x_api_key: str = Header(...)
+    # リクエストヘッダーからAPIキーを取得して認証
+    # if x_api_key != API_KEY:
+    #     raise HTTPException(status_code=401, detail="Invalid API Key")
     """
     入力された問題文に対して、類似検索を行い、推奨ラベルを返すAPI
     """
@@ -46,7 +55,10 @@ async def classify_text(request: TextRequest):
 
 
 @app.post("/store")
-async def store_text_api(request: StoreRequest):
+async def store_text_api(request: StoreRequest):#,x_api_key: str = Header(...)
+    # リクエストヘッダーからAPIキーを取得して認証
+    # if x_api_key != API_KEY:
+    #     raise HTTPException(status_code=401, detail="Invalid API Key")
     text = request.text
     labels = request.labels
 
@@ -54,7 +66,10 @@ async def store_text_api(request: StoreRequest):
     store = store_text(text, labels)
 
 @app.post("/search")
-async def search_api(request: StoreRequest):
+async def search_api(request: StoreRequest):#,x_api_key: str = Header(...)
+    # リクエストヘッダーからAPIキーを取得して認証
+    # if x_api_key != API_KEY:
+    #     raise HTTPException(status_code=401, detail="Invalid API Key")
     text = request.text
     labels = request.labels
     
