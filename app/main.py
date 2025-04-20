@@ -1,3 +1,4 @@
+import re
 import uuid
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
@@ -29,7 +30,6 @@ app.add_middleware(
 def read_root():
     return {"message": "Hello World"}
 
-
 @app.post("/classify")
 async def classify_text(request: TextRequest):
     """
@@ -52,6 +52,33 @@ async def store_text_api(request: StoreRequest):
 
     # Pineconeに保存
     store = store_text(text, labels)
+
+@app.post("/meta_store")
+async def metastore_text_api(request: TextRequest):
+
+    # コロン (:) または 改行 (\n) で分割
+    lines = [line.strip() for line in request.text.strip().split('\n') if line.strip()]
+    
+    stored_count = 0
+    all_labels = []
+
+    for line in lines:
+        # コロンでラベル部分と問題部分を分割（最初のコロンのみ対象）
+        label_part, text = line.split(':', 1)
+        # カンマでラベルを複数分割し、空白を削除
+        label_list = [label.strip() for label in label_part.split(',') if label.strip()]
+        text = text.strip()
+
+        #データを保存
+        store_text(text, label_list)
+        stored_count += 1
+        all_labels.append(label_list)
+
+    return {
+        "status": "success",
+        "stored": stored_count,
+        "labels": all_labels
+    }
 
 @app.post("/search")
 async def search_api(request: StoreRequest):
