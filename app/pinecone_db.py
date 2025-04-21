@@ -68,7 +68,7 @@ def store_text(text: str, labels: list[str]) -> bool:
     for match in existing.get("matches", []):
         if match["score"] > 0.96:  # かなり近い
             if match["metadata"].get("text") == text:
-                print("⚠️ 重複テキスト：保存スキップ")
+                print(f"⚠️ 重複テキスト：保存スキップ：{text}")
                 return False
 
     id = str(uuid.uuid4())
