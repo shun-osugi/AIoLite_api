@@ -37,10 +37,10 @@ def read_root():
     return {"message": "Hello World"}
 
 @app.post("/classify")
-async def classify_text(request: TextRequest):#,x_api_key: str = Header(...)
+async def classify_text(request: TextRequest,x_api_key: str = Header(...)):
     # リクエストヘッダーからAPIキーを取得して認証
-    # if x_api_key != API_KEY:
-    #     raise HTTPException(status_code=401, detail="Invalid API Key")
+    if x_api_key != API_KEY:
+        raise HTTPException(status_code=401, detail="Invalid API Key")
     """
     入力された問題文に対して、類似検索を行い、推奨ラベルを返すAPI
     """
@@ -55,10 +55,10 @@ async def classify_text(request: TextRequest):#,x_api_key: str = Header(...)
 
 
 @app.post("/store")
-async def store_text_api(request: StoreRequest):#,x_api_key: str = Header(...)
+async def store_text_api(request: StoreRequest,x_api_key: str = Header(...)):
     # リクエストヘッダーからAPIキーを取得して認証
-    # if x_api_key != API_KEY:
-    #     raise HTTPException(status_code=401, detail="Invalid API Key")
+    if x_api_key != API_KEY:
+        raise HTTPException(status_code=401, detail="Invalid API Key")
     text = request.text
     labels = request.labels
 
@@ -93,10 +93,10 @@ async def metastore_text_api(request: TextRequest):
     }
 
 @app.post("/search")
-async def search_api(request: StoreRequest):#,x_api_key: str = Header(...)
+async def search_api(request: StoreRequest,x_api_key: str = Header(...)):
     # リクエストヘッダーからAPIキーを取得して認証
-    # if x_api_key != API_KEY:
-    #     raise HTTPException(status_code=401, detail="Invalid API Key")
+    if x_api_key != API_KEY:
+        raise HTTPException(status_code=401, detail="Invalid API Key")
     text = request.text
     labels = request.labels
     

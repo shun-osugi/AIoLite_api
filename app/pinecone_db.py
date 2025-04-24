@@ -29,7 +29,7 @@ if index_name not in pc.list_indexes().names():
 # インデックスに接続
 index = pc.Index(index_name)
 
-def assign_labels_to_text(text: str, threshold: float=0.74, top_k: int=4) -> List[str]:
+def assign_labels_to_text(text: str, threshold: float=0.63, top_k: int=4) -> List[str]:
     """
     問題文に対して複数のラベルを付ける関数
     :param text: 解析する問題文
