@@ -1,5 +1,5 @@
 # ワークフローの名前
-name: Renderサービス常時起動
+name: RenderAccess
 
 # ワークフローが実行されるタイミングを定義
 on:
